@@ -4,11 +4,16 @@ import ChartBTS from "@/components/ChartBTS.vue";
 
 <template>
   <ChartBTS msg="깜찍한 RC CAR PJT" />
+  <!-- <ChartBTS/> -->
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
+}
+
+.title {
+  text-align: center;
 }
 
 .logo {

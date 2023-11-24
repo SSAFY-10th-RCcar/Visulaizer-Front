@@ -3,25 +3,20 @@ import { ref, onMounted } from "vue";
 import io from "socket.io-client"
 import VueApexCharts from "vue3-apexcharts";
 import dayjs from "dayjs";
-//const {onMounted} = Vue;
 
 class Queue {
   constructor() {
     this._arr = [];
   }
-
   length() {
     return this._arr.length;
   }
-
   enqueue(item) {
     this._arr.push(item);
   }
-
   dequeue() {
     return this._arr.shift();
   }
-
   get_arr() {
     return this._arr;
   }
@@ -80,55 +75,74 @@ socket.on("kfc", (arg) => {
       categories: timeArray,
       //categories: times.value,
     },
+    title:{
+      text: "온도 습도 대기압",
+      align: 'center',
+      style:{
+        fontWeight:'bold',
+        fontSize: '20px'
+      }
+    }
   };
 
   series1.value = [
-    {
-      name: "온도",
-      //data: temperatures.value,
-      data: temper,
-    },
+    // {
+    //   name: "온도",
+    //   //data: temperatures.value,
+    //   data: temper,
+    // },
     {
       name: "습도",
       //data: humidities.value,
       data: hum,
     },
-    {
-      name: "대기압",
-      //data: pressures.value,
-      data: press,
-    },
+    // {
+    //   name: "대기압",
+    //   //data: pressures.value,
+    //   data: press,
+    // },
   ];
 
 //
   options2.value = {
-    series: velocity.value,
+    //series: velocity.value,
+    series: velocity.value.map(value => value * 200),//
+    //series: [50],
     chart: {
       height: 350,
       type: 'radialBar',
       offsetY: -10
     },
+    title:{
+      text: "속도",
+      align: 'center',
+      style:{
+        fontWeight:'bold',
+        fontSize: '20px'
+      }
+    },
     plotOptions: {
-    radialBar: {
-      startAngle: -135,
-      endAngle: 135,
-      dataLabels: {
-        name: {
-          pontSize: '16px',
-          color: undefined,
-          offsetY: 120
-        },
-        value: {
-          offsetY: 76, 
-          fontSize: '22px',
-          color: undefined,
-          formatter: function (val) {
-            return val + "m/h";
+      radialBar: {
+        startAngle: -135,
+        endAngle: 135,
+        dataLabels: {
+          name: {
+            pontSize: '16px',
+            color: undefined,
+            offsetY: 120
+          },
+          value: {
+            offsetY: 76, 
+            fontSize: '22px',
+            color: undefined,
+            formatter: function (val) {
+              return val + "m/s";//
+            }
           }
         }
       }
-    }
     },
+
     fill: {
       type: 'gradient',
       gradient: {
@@ -145,6 +159,7 @@ socket.on("kfc", (arg) => {
     },
     labels: ['Velocity'],
   };
+
   series2.value = velocity.value;//속도 값
   //
 
@@ -166,6 +181,8 @@ socket.on("kfc", (arg) => {
   //   data: [80, 50, 30, 40, 100, 20],
   // }];
 
+  //
+
 });
 //});
 
@@ -175,18 +192,22 @@ socket.emit("bbq", "is soso");
 
 
 <template>
-  <div class="BTS">
-    <h1>{{ msg }}</h1>
-    <p>
+  <!-- <div class="BTS"> -->
+  <div class = "overall">
+    <h1 class = "title">{{ msg }}</h1>
+    
+    <!-- <p class = "title">
       온도 습도 대기압
-    </p>
+    </p> -->
     <VueApexCharts width="500" type="line" :options="options1" :series="series1" />
   </div>
-
+  <div>
+    <p></p><p></p>
+  </div>
   <div id="chart">
-    <p>
+    <!-- <p>
       속도
-    </p>
+    </p> -->
       <VueApexCharts width="500" type="radialBar" :options="options2" :series="series2" />
   </div>
 
